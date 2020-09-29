@@ -1,10 +1,11 @@
-if [ -f "timestamp.zip" ]; then
-  rm timestamp.zip
+if [ -f "app.zip" ]; then
+  rm app.zip
 fi
 
-find ./timestamp -path ./timestamp/node_modules -prune -o -print0 | xargs -0 zip timestamp.zip
-scp timestamp.zip bastion@bastionofshadows.com:
-ssh bastion@bastionofshadows.com "rm -r ~/fcc.christianspeegle.com/timestamp"
-ssh bastion@bastionofshadows.com "unzip ~/timestamp.zip -d ~/fcc.christianspeegle.com"
-ssh bastion@bastionofshadows.com "npm --prefix ~/fcc.christianspeegle.com/timestamp i"
-ssh bastion@bastionofshadows.com "rm ~/timestamp.zip"
+zip app.zip package.json package-lock.json
+find ./app -type f -print0 | xargs -0 zip app.zip
+scp app.zip bastion@bastionofshadows.com:
+ssh bastion@bastionofshadows.com "rm -r ~/fcc.christianspeegle.com"
+ssh bastion@bastionofshadows.com "unzip ~/app.zip -d ~/fcc.christianspeegle.com"
+ssh bastion@bastionofshadows.com "npm --prefix ~/fcc.christianspeegle.com i"
+ssh bastion@bastionofshadows.com "rm ~/app.zip"
