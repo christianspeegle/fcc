@@ -1,7 +1,10 @@
 const express = require("express")
+const cors = require("cors")
 
 const app = new express()
 const port = 6001
+
+app.use(cors({optionsSuccessStatus: 200}))
 
 app.use("/", (request, response) => {
 	console.log("-----Starting Request-----")
