@@ -1,15 +1,11 @@
 const express = require("express")
 const cors = require("cors")
 const bp = require("body-parser")
-const promisify = require("util").promisify
-const dnsl = require("dns").lookup
-const lookup = promisify(dnsl)
-const {hasProtocol, stripProtocol} = require("./utils/urls")
+const {hasProtocol, stripProtocol, lookup} = require("./utils/urls")
 
 const app = new express()
 const router = express.Router()
 const port = 6003
-
 const urls = []
 
 app.use(cors({optionsSuccessStatus: 200}))

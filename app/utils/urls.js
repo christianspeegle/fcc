@@ -1,3 +1,7 @@
+const promisify = require("util").promisify
+const dnsl = require("dns").lookup
+const lookup = promisify(dnsl)
+
 function hasProtocol(url) {
 	if (!url || typeof url !== "string")
 		throw new Error("parameter 'url' must be a non-empty string")
@@ -18,5 +22,6 @@ function stripProtocol(url) {
 
 module.exports = {
 	hasProtocol,
-	stripProtocol
+	stripProtocol,
+	lookup
 }
