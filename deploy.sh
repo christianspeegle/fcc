@@ -3,7 +3,7 @@ if [ -f "app.zip" ]; then
 fi
 
 zip app.zip package.json package-lock.json
-find ./app -type f -print0 | xargs -0 zip app.zip
+find ./app \( -name *.spec.js -o -name microservice-template.js \) -prune -o -type f -print0 | xargs -0 zip app.zip
 scp app.zip bastion@bastionofshadows.com:
 ssh bastion@bastionofshadows.com "rm -r ~/fcc.christianspeegle.com"
 ssh bastion@bastionofshadows.com "unzip ~/app.zip -d ~/fcc.christianspeegle.com"
