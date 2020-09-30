@@ -124,7 +124,7 @@ describe("addExercise", () => {
 	const duration = "5 reps"
 	const date = new Date("2011-09-27")
 
-	it("should return the user object with _id, username, and log properties", () => {
+	it("should return the user object with _id, username, description, duration, and date properties", () => {
 		const user = repo.addExercise(userId, description, duration, date)
 
 		expect(user)
@@ -138,11 +138,19 @@ describe("addExercise", () => {
 			.toBe(username1)
 
 		expect(user)
-			.toHaveProperty("log")
-		expect(Array.isArray(user.log))
-			.toBe(true)
-		expect(user.log)
-			.toHaveLength(1)
+			.toHaveProperty("description")
+		expect(user.description)
+			.toBe(description)
+
+		expect(user)
+			.toHaveProperty("duration")
+		expect(user.duration)
+			.toBe(duration)
+
+		expect(user)
+			.toHaveProperty("date")
+		expect(user.date)
+			.toBe(date.toDateString())
 	})
 
 	it("should return null if the supplied user id doesn't exist in the repository", () => {
@@ -151,50 +159,17 @@ describe("addExercise", () => {
 			.toBe(null)
 	})
 
-	it("should return an array of exercise objects with description, duration, and date props", () => {
-		const user = repo.addExercise(userId, description, duration, date)
-		const exercise = user.log[0]
-
-		expect(exercise)
-			.toHaveProperty("description")
-		expect(exercise.description)
-			.toBe("5lb dumbbell")
-
-		expect(exercise)
-			.toHaveProperty("duration")
-		expect(exercise.duration)
-			.toBe("5 reps")
-
-		expect(exercise)
-			.toHaveProperty("date")
-		expect(exercise.date.getTime())
-			.toBe(new Date("2011-09-27").getTime())
-	})
-
 	it("should use the current date as a default if no date is supplied", () => {
 		const user = repo.addExercise(userId, description, duration)
-		const date = user.log[0].date
 		const now = new Date()
 
-		expect(now.getTime() - date.getTime())
-			.toBeLessThanOrEqual(1000)
+		expect(user.date)
+			.toBe(now.toDateString())
 	})
 
 	it("should throw an error if the date is invalid", () => {
 		expect(() => repo.addExercise(userId, description, duration, "that's what she said"))
 			.toThrow("Invalid date supplied")
-	})
-
-	it("should contain a Date object even if a string is supplied as the date", () => {
-		const user = repo.addExercise(userId, description, duration, "2020-10-23")
-		expect(user.log[0].date)
-			.toBeInstanceOf(Date)
-	})
-
-	it("should contain a Date object even if a number is supplied as the date", () => {
-		const user = repo.addExercise(userId, description, duration, 100000000)
-		expect(user.log[0].date)
-			.toBeInstanceOf(Date)
 	})
 
 })
@@ -254,11 +229,11 @@ describe("getExerciseLog", () => {
 		expect(log)
 			.toHaveLength(3)
 		expect(log[0].date)
-			.toStrictEqual(d2)
+			.toBe(d2.toDateString())
 		expect(log[1].date)
-			.toStrictEqual(d3)
+			.toBe(d3.toDateString())
 		expect(log[2].date)
-			.toStrictEqual(d4)
+			.toBe(d4.toDateString())
 
 	})
 
@@ -273,15 +248,15 @@ describe("getExerciseLog", () => {
 		const user = repo.getExerciseLog(1)
 
 		expect(user.log[0].date)
-			.toStrictEqual(d1)
+			.toBe(d1.toDateString())
 		expect(user.log[1].date)
-			.toStrictEqual(d2)
+			.toBe(d2.toDateString())
 		expect(user.log[2].date)
-			.toStrictEqual(d3)
+			.toBe(d3.toDateString())
 		expect(user.log[3].date)
-			.toStrictEqual(d4)
+			.toBe(d4.toDateString())
 		expect(user.log[4].date)
-			.toStrictEqual(d5)
+			.toBe(d5.toDateString())
 	})
 
 	it("should return only the first n exercises if limit option is passed", () => {
@@ -300,10 +275,10 @@ describe("getExerciseLog", () => {
 			.toHaveLength(2)
 
 		expect(user.log[0].date)
-			.toStrictEqual(d1)
+			.toBe(d1.toDateString())
 
 		expect(user.log[1].date)
-			.toStrictEqual(d2)
+			.toBe(d2.toDateString())
 	})
 
 	it("should throw an error if the from option is not a valid date", () => {

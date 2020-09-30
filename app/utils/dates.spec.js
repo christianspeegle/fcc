@@ -26,6 +26,15 @@ describe("isValidDate", () => {
 			.toBe(false)
 	})
 
+	it("should return false if the date is falsy", () => {
+		expect(isValidDate(null))
+			.toBe(false)
+		expect(isValidDate(undefined))
+			.toBe(false)
+		expect(isValidDate(false))
+			.toBe(false)
+	})
+
 })
 
 describe("getDate", () => {

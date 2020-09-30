@@ -51,7 +51,7 @@ router
 		return response.json(repo.getAllUsers())
 	})
 	.get("/log", (request, response) => {
-		if(!request.query.userId) {
+		if (!request.query.userId) {
 			return response.json(invalidResponse)
 		}
 
@@ -75,7 +75,7 @@ router
 		let user
 		try {
 			user = repo.getExerciseLog(id, options)
-		} catch(e) {
+		} catch (e) {
 			console.log(e)
 			user = null
 		}
@@ -86,6 +86,9 @@ router
 		}
 
 		return response.json(user)
+	})
+	.get("/", (request, response) => {
+		return response.json(repo.getRepo())
 	})
 
 app.use(router)

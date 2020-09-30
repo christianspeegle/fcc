@@ -1,4 +1,8 @@
 function isValidDate(date) {
+	if (!date && date !== 0) {
+		return false
+	}
+
 	if (!(date instanceof Date)) {
 		date = new Date(date)
 	}

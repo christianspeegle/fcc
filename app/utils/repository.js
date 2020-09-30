@@ -64,7 +64,7 @@ function getAllUsers() {
  * @param {string} description The description of the exercise
  * @param {string} duration The duration of the exercise
  * @param {int|string|Date} date The date the exercise was performed. Defaults to today
- * @returns {null|{log: [], _id: number, username: string}}
+ * @returns {null|{_id: number, username: string, description: string, duration: string, date: string}}
  */
 function addExercise(id, description, duration, date = new Date()) {
 	const user = getUser(id)
@@ -77,14 +77,23 @@ function addExercise(id, description, duration, date = new Date()) {
 	}
 
 	date = getDate(date)
-
-	user.log.push({
+	const exercise = {
 		description,
 		duration,
 		date
-	})
+	}
+	user.log.push(exercise)
 
-	return user
+	const userCopy = {
+		_id: user._id,
+		username: user.username
+	}
+
+	userCopy.description = description
+	userCopy.duration = parseInt(duration)
+	userCopy.date = date.toDateString()
+
+	return userCopy
 }
 
 function getExerciseLog(id, options = {}) {
@@ -100,7 +109,19 @@ function getExerciseLog(id, options = {}) {
 		return null
 	}
 
-	const userCopy = Object.assign({}, user)
+	const userCopy = {
+		_id: user._id,
+		username: user.username,
+		log: []
+	}
+
+	user.log.forEach(exercise => {
+		userCopy.log.push({
+			description: exercise.description,
+			duration: exercise.duration,
+			date: new Date(exercise.date)
+		})
+	})
 
 	if (options.hasOwnProperty("from")) {
 		options.from = getDate(options.from)
@@ -140,9 +161,18 @@ function getExerciseLog(id, options = {}) {
 		}
 	}
 
+	userCopy.log = userCopy.log.map(exercise => {
+		exercise.date = exercise.date.toDateString()
+		return exercise
+	})
+
 	userCopy.count = userCopy.log.length
 
 	return userCopy
+}
+
+function getRepo() {
+	return repo
 }
 
 function clean() {
@@ -155,5 +185,6 @@ module.exports = {
 	getAllUsers,
 	addExercise,
 	getExerciseLog,
+	getRepo,
 	clean
 }
